@@ -1,0 +1,73 @@
+#!/bin/bash
+export RSTCOLOR=$(tput sgr0)
+export RED='\E[31m'
+export REDG='\E[31;1m'
+export GREEN='\E[32m'
+export GREENG='\E[32;1m'
+export YELLOW='\E[33m'
+export YELLOWG='\E[33;1m'
+export PAPAYA='\e[38;5;209m'
+export BOLD='\e[1m'
+
+cd /home/u53r_/Work/papaya/
+		case $1 in
+
+				FULL)
+					echo -e $BOLD$PAPAYA"PROCESSADOR..."$RSTCOLOR;
+					./ValidaArquitetura.sh;
+					./MonitoraCPU.sh;
+					echo -e $BOLD$PAPAYA"MEMORIA RAM... " $RSTCOLOR;
+					./ValidaMemoria.sh;
+					echo -e $BOLD$PAPAYA"DISCO..."$RSTCOLOR;
+					./ValidaDisco.sh;
+					./VerificaEscrita.sh;
+					echo -e $BOLD$PAPAYA"SISTEMA OPERACIONAL..." $RSTCOLOR;
+					./ValidaDebian.sh
+					echo -e $BOLD$PAPAYA"VIRTUALIZACAO..." $RSTCOLOR;
+					./ValidaVirtualizacao.sh
+					echo -e $BOLD$PAPAYA"USUARIOS LOGADOS... " $RSTCOLOR;
+					./ValidaSessao.sh;
+					echo -e $BOLD$PAPAYA"REDE..." $RSTCOLOR;
+					./ValidaRede.sh
+					echo -e $BOLD$PAPAYA"PROCESSOS..."$RSTCOLOR;
+					./ProcessosIXC.sh;
+					;;
+				cpu)
+					echo -e $BOLD$PAPAYA"PROCESSADOR..."$RSTCOLOR;
+					./ValidaArquitetura.sh;
+					./MonitoraCPU.sh;
+					;;
+				ram)
+					echo -e $BOLD$PAPAYA"MEMORIA RAM... " $RSTCOLOR;
+					./ValidaMemoria.sh;
+					;;
+				disco)
+					echo -e $BOLD$PAPAYA"DISCO..."$RSTCOLOR;
+					./ValidaDisco.sh;
+					./VerificaEscrita.sh;
+					;;
+				sistema)
+					echo -e $BOLD$PAPAYA"SISTEMA OPERACIONAL..." $RSTCOLOR;
+					./ValidaDebian.sh;
+					echo -e $BOLD$PAPAYA"VIRTUALIZACAO..." $RSTCOLOR;
+					./ValidaVirtualizacao.sh;
+					echo -e $BOLD$PAPAYA"USUARIOS LOGADOS... " $RSTCOLOR;
+					./ValidaSessao.sh;
+					;;
+				rede)
+					echo -e $BOLD$PAPAYA"REDE..." $RSTCOLOR;
+					./ValidaRede.sh;
+					;;
+				ixcsoft)
+					echo -e $BOLD$PAPAYA"PROCESSOS..."$RSTCOLOR;
+					./ProcessosIXC.sh;
+					;;
+				help)
+					echo -e $BOLD$PAPAYA"... MANUAL ..." $RSTCOLOR;
+					./Manual.sh
+					;;
+				*)
+					echo -e $REDG"Opção inválida, tente novamente com: cpu | ram | disco | sistema | rede | ixcsoft | help "$RSTCOLOR;
+					;;
+			esac
+			rm /tmp/{osrelease,who,diskusage,disks,procs,ramusage} 2>/dev/null
