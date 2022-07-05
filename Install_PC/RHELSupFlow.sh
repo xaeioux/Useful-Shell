@@ -19,12 +19,11 @@ function ConfigureRepositories() {
 	echo 'max_parallel_downloads=10' | sudo tee -a /etc/dnf/dnf.conf
 
 	sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
-	sudo dnf copr enable -y the4runner/firefox-dev
 	sudo dnf update -y
 }
 
 function InstallDependencies() {
-	sudo dnf install -y jq neovim mtr neofetch most zsh NetworkManager-l2tp-gnome lsd bat chrome-gnome-shell virt-manager gnome-extensions-app gnome-tweak-tool ffmpeg bpytop util-linux-user firefox-dev
+	sudo dnf install -y jq neovim mtr neofetch most zsh NetworkManager-l2tp-gnome lsd bat chrome-gnome-shell virt-manager gnome-extensions-app gnome-tweak-tool ffmpeg bpytop util-linux-user
 }
 
 function ConfigureGnome() {
@@ -230,6 +229,22 @@ function ConfigureZsh() {
 			echo '# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.';
 			echo '[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh';
 			echo "alias mkpass='cd ~ && ./.mkpass.sh'";
+			echo 'sudo rm -Rf /opt/firefox-aurora*';
+			echo 'sudo rm -Rf /usr/bin/firefox-aurora';
+			echo 'sudo rm -Rf /usr/share/applications/firefox-aurora.desktop';
+			echo "";
+			echo 'wget "https://download.mozilla.org/?product=firefox-devedition-latest-ssl&os=linux64&lang=en-US" -O firefox-dev.tar.bz2';
+			echo "";
+			echo 'sudo tar -jxvf  firefox-dev.tar.bz2 -C /opt/';
+			echo 'sudo mv /opt/firefox*/ /opt/firefox-aurora';
+			echo 'sudo ln -sf /opt/firefox-aurora/firefox /usr/bin/firefox-aurora';
+			echo 'rm firefox-dev.tar.bz2';
+			echo "";
+			echo 'echo -e "[Desktop Entry]\n Version=yy.y.y\n Encoding=UTF-8\n Name=Mozilla Firefox\n Comment=The best web browser ever made\n Exec=env MOZ_ENABLE_WAYLAND=1 MOZ_APP_REMOTINGNAME=firefox-aurora /opt/firefox-aurora/firefox\n Icon=/opt/firefox-aurora/browser/chrome/icons/default/default128.png\n Type=Application\n Categories=Network" | sudo tee /usr/share/applications/firefox-aurora.desktop';
+			echo "";
+        	echo 'sudo cp /usr/share/applications/firefox-aurora.desktop ~/.local/share/applications';
+        	echo 'sudo chown $USER ~/.local/share/applications/firefox-aurora.desktop';
+        	echo 'sudo chmod +x ~/.local/share/applications/firefox-aurora.desktop';
 			echo "";
 			echo 'function fix () {';
 			echo 'CARDS=`"ls" ~/Downloads/Card* 1> /dev/null 2>&1 | wc -l 1> /dev/null 2>&1;`';
@@ -262,6 +277,22 @@ function InstallSkype() {
 function InstallChromium() {
 	sudo dnf install -y chromium
 }
+
+function InstallFirefox () {
+	wget "https://download.mozilla.org/?product=firefox-devedition-latest-ssl&os=linux64&lang=en-US" -O firefox-dev.tar.bz2
+
+	sudo tar -jxvf  firefox-dev.tar.bz2 -C /opt/
+	sudo mv /opt/firefox*/ /opt/firefox-aurora
+	sudo ln -sf /opt/firefox-aurora/firefox /usr/bin/firefox-aurora
+	rm firefox-dev.tar.bz2
+
+	echo -e "[Desktop Entry]\n Version=yy.y.y\n Encoding=UTF-8\n Name=Mozilla Firefox\n Comment=The best web browser ever made\n Exec=env MOZ_ENABLE_WAYLAND=1 MOZ_APP_REMOTINGNAME=firefox-aurora /opt/firefox-aurora/firefox\n Icon=/opt/firefox-aurora/browser/chrome/icons/default/default128.png\n Type=Application\n Categories=Network" | sudo tee /usr/share/applications/firefox-aurora.desktop
+
+    sudo cp /usr/share/applications/firefox-aurora.desktop ~/.local/share/applications
+    sudo chown $USUARIO ~/.local/share/applications/firefox-aurora.desktop
+    sudo chmod +x ~/.local/share/applications/firefox-aurora.desktop
+}
+
 
 function InstallFlatpak() {
 	flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
